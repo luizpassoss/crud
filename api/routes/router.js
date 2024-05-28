@@ -7,7 +7,7 @@ router.get("/getCarrosByModel", getCarrosByModel)
 router.post("/addCarros", addCarros)
 router.put("/updateCarros", updateCarros)
 router.delete("/removeCarros", removeCarros)
-router.post("/addCarros", addCarros)
+
 
 
 export default router
