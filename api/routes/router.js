@@ -1,6 +1,13 @@
 import express from "express";
-import { getCarros} from "../controlers/crudCarros.js";
+import { getCarros, getCarrosByModel, updateCarros, removeCarros, addCarros} from "../controlers/crudCarros.js";
 
 const router = express.Router()
 router.get("/getCarros", getCarros)
+router.get("/getCarrosByModel", getCarrosByModel)
+router.post("/addCarros", addCarros)
+router.put("/updateCarros", updateCarros)
+router.delete("/removeCarros", removeCarros)
+router.post("/addCarros", addCarros)
+
+
 export default router
