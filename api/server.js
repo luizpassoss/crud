@@ -1,9 +1,8 @@
-// server.js
-const express = require('express');
-const bodyParser = require('body-parser');
-const { sequelize } = require('./models');
-const produtoRoutes = require('./routes/produtoRoutes');
-const authRoutes = require('./routes/authRoutes');
+import express from 'express';
+import bodyParser from 'body-parser';
+import { sequelize } from './models/index.js';
+import produtoRoutes from './routes/produtoRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 const app = express();
 const PORT = 3000;

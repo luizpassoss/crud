@@ -1,31 +1,29 @@
+import { Usuario } from '../models/index.js';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
-function login(req, res) {
-    // Implemente a lógica de login
-    const { username, password } = req.body;
-    if (username === 'admin' && password === 'senha123') {
-        const token = jwt.sign({ username }, 'segredo', { expiresIn: '1h' });
-        res.json({ token });
-    } else {
-        res.status(401).json({ message: 'Credenciais inválidas' });
-    }
-}
-
-function verifyToken(req, res, next) {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) {
-        return res.status(403).json({ message: 'Token não fornecido' });
-    }
-
-    jwt.verify(token, 'segredo', (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ message: 'Token inválido' });
-        }
-        req.user = decoded;
-        next();
+export const signup = async (req, res) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 8);
+    const user = await Usuario.create({
+      username: req.body.username,
+      password: hashedPassword
     });
-}
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
-export { login, verifyToken };
-
-
+export const login = async (req, res) => {
+  try {
+    const user = await Usuario.findOne({ where: { username: req.body.username } });
+    if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
+      return res.status(401).json({ error: 'Usuário ou senha incorretos' });
+    }
+    const token = jwt.sign({ id: user.id }, 'your_secret_key', { expiresIn: '1h' });
+    res.status(200).json({ token });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};

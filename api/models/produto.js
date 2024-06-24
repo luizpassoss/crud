@@ -1,16 +1,32 @@
-import mongoose from 'mongoose';
+import { DataTypes } from 'sequelize';
 
-const produtoSchema = new mongoose.Schema({
-    cod_produto: { type: String, required: true },
-    nome_produto: { type: String, required: true },
-    qtde_produto: { type: Number, required: true },
-    categoria: {
-        id_categoria: { type: String },
-        nome_categoria: { type: String }
+const produtoModel = (sequelize) => {
+  return sequelize.define('Produto', {
+    cod_produto: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
+    nome_produto: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    qtde_produto: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    id_categoria: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'categoria',
+        key: 'id_categoria'
+      }
     }
-});
+  }, {
+    tableName: 'produto',
+    timestamps: false
+  });
+};
 
-const Produto = mongoose.model('Produto', produtoSchema);
-
-export default Produto;
-
+export default produtoModel;

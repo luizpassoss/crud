@@ -1,11 +1,9 @@
 import express from 'express';
+import { signup, login } from '../controllers/authController.js';
+
 const router = express.Router();
-import { login, verifyToken } from '../controllers/authController.js';
 
+router.post('/signup', signup);
 router.post('/login', login);
-
-router.get('/protected-route', verifyToken, (req, res) => {
-    res.json({ message: 'Rota protegida acessada com sucesso', user: req.user });
-});
 
 export default router;
